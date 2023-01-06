@@ -16,7 +16,25 @@ game_params = {
     'num_actions': 2
 }
 
-total_missed_hits = 
+missed_hit_image = cv2.imread('C:\\Users\\Tristan\\Desktop\\Osu! Learning bot\\MonkoEdit\hit0.png', cv2.IMREAD_GRAYSCALE)
+
+def total_missed_hits(game_screenshot):
+  # Convertir la capture d'écran du jeu en niveaux de gris
+  game_screenshot_gray = cv2.cvtColor(game_screenshot, cv2.COLOR_BayerRG2GRAY)
+  
+  # Rechercher l'image de faute dans la capture d'écran du jeu
+  result = cv2.matchTemplate(game_screenshot_gray, missed_hit_image, cv2.TM_CCOEFF_NORMED)
+  
+  # Si l'image de faute est détectée dans la capture d'écran, incrémenter le compteur de fautes
+  if cv2.minMaxLoc(result)[1] > 0.9:
+    missed_hits += 1
+    return 1
+  return 0
+
+def step(self, action, image):
+  # Récupérez l'image de l'environnement
+  image = self.get_image()
+  missed_hits += total_missed_hits(image)
 
 missed_hits = total_missed_hits
 
